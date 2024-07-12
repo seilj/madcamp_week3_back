@@ -4,12 +4,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { MyplayerModule } from './myplayer/myplayer.module';
+import { MeetingsModule } from './meetings/meetings.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost/userdb'),
     UserModule,
-    MyplayerModule
+    MyplayerModule,
+    MeetingsModule
   ],
   controllers: [AppController],
   providers: [AppService],
