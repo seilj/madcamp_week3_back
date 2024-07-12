@@ -1,14 +1,40 @@
-// src/schemas/user.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
 export class User extends Document {
+  @Prop({ required: true, unique: true }) // 중복 ID를 허용하지 않도록 unique 설정
+  id: string;
+
   @Prop({ required: true })
-  id: number;
+  password: string;
 
   @Prop({ required: true })
   nickname: string;
+
+  @Prop({ type: [String] })
+  favoriteLeagues: string[];
+
+  @Prop({ type: [String] })
+  favoriteTeams: string[];
+
+  @Prop({ type: [String] })
+  favoritePlayers: string[];
+
+  @Prop({ default: 0 }) // 포인트는 기본값 0으로 설정
+  points: number;
+
+  @Prop()
+  kakaoId?: String;
+
+  @Prop()
+  email?: string;
+
+  @Prop()
+  city?: string;
+
+  @Prop()
+  myPlayerId?: string;
 }
 
 export type UserDocument = User & Document;
