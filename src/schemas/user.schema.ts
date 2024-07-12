@@ -34,7 +34,7 @@ export class User extends Document {
   city?: string;
 
   @Prop()
-  myPlayerId?: string;
+  myPlayerId?: string[];
 }
 
 export type UserDocument = User & Document;
