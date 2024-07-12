@@ -25,9 +25,16 @@ export class UserController {
   }
 
   @Get('login')
-  async login(@Query('id') id: string, @Query('password') password: string): Promise<{ success: boolean }> {
-    const isValid = await this.userService.validateUserPassword(id, password);
-    return { success: isValid };
+  async login(
+    @Query('id') id: string,
+    @Query('password') password: string,
+  ): Promise<User> {
+    const user = await this.userService.validateUserPassword(id, password);
+    if (user) {
+      return user; // Return user details if authentication is successful
+    } else {
+      throw new Error('Invalid credentials');
+    }
   }
 
   @Get()

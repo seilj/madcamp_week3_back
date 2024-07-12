@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 export type MyPlayerDocument = MyPlayer & Document;
 
 const MIN = 1;
-const MAX = 100;
+const MAX = 150;
 
 @Schema()
 export class MyPlayer {
@@ -19,6 +19,9 @@ export class MyPlayer {
 
   @Prop({ required: true, enum: ['왼발', '오른발'] })
   preferredFoot: string;
+
+  @Prop({required: true })
+  overAll: number;
 
   // 공격능력치 (포지션이 골키퍼가 아닌 경우)
   @Prop({ type: Number, min: MIN, max: MAX, required: function() { return this.position !== '골키퍼'; } })

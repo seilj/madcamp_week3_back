@@ -24,12 +24,13 @@ export class UserService {
     }
   }
 
-  async validateUserPassword(id: string, password: string): Promise<boolean> {
+  async validateUserPassword(id: string, password: string): Promise<User | null> {
     const user = await this.userModel.findOne({ id }).exec();
     if (!user) {
-      return false;
+      return null;
     }
-    return bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
+    return isMatch ? user : null; // Return user if password matches
   }
 
   async getAllUsers(): Promise<User[]> {
