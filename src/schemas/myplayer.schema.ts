@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type MyPlayerDocument = MyPlayer & Document;
 
-const MIN = 1;
+const MIN = 0;
 const MAX = 150;
 
 @Schema()
@@ -31,6 +31,10 @@ export class MyPlayer {
   shooting?: number;
 
   @Prop({ type: Number, min: MIN, max: MAX, required: function() { return this.position !== '골키퍼'; } })
+  offTheBall?: number;
+
+//패스 능력치
+  @Prop({ type: Number, min: MIN, max: MAX, required: function() { return this.position !== '골키퍼'; } })
   passing?: number;
 
   @Prop({ type: Number, min: MIN, max: MAX, required: function() { return this.position !== '골키퍼'; } })
@@ -40,7 +44,7 @@ export class MyPlayer {
   crossing?: number;
 
   @Prop({ type: Number, min: MIN, max: MAX, required: function() { return this.position !== '골키퍼'; } })
-  offTheBall?: number;
+  vision?: number;
 
   // 수비능력치 (포지션이 골키퍼가 아닌 경우)
   @Prop({ type: Number, min: MIN, max: MAX, required: function() { return this.position !== '골키퍼'; } })
@@ -66,6 +70,9 @@ export class MyPlayer {
   stamina: number;
 
   @Prop({ type: Number, min: MIN, max: MAX, required: true })
+  agility: number;
+
+  @Prop({ type: Number, min: MIN, max: MAX, required: true })
   jumping: number;
 
   @Prop({ type: Number, min: MIN, max: MAX, required: true })
@@ -74,6 +81,9 @@ export class MyPlayer {
   // 골키퍼 능력치 (포지션이 골키퍼인 경우)
   @Prop({ type: Number, min: MIN, max: MAX, required: function() { return this.position === '골키퍼'; } })
   reflexes?: number;
+
+  @Prop({ type: Number, min: MIN, max: MAX, required: function() { return this.position === '골키퍼'; } })
+  aeriel?: number;
 
   @Prop({ type: Number, min: MIN, max: MAX, required: function() { return this.position === '골키퍼'; } })
   handling?: number;
