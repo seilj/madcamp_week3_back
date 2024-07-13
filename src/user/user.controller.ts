@@ -1,10 +1,11 @@
 // src/user/user.controller.ts
 //엔드포인트를 정의
 
-import { Controller, Get, Post, Body, Param, Query,Put ,Delete, HttpException, HttpStatus, Logger} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query,Put ,Delete, HttpException, HttpStatus, Logger, Patch} from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '../schemas/user.schema';
-
+import { MyPlayer } from '../schemas/myplayer.schema';
+import { FriendRequest } from 'src/schemas/friend_request.schema';
 
 @Controller('users')
 export class UserController {
@@ -51,15 +52,57 @@ export class UserController {
       return !!user;
     }
 
-  @Put('nickname')
-    async updateUser(@Query('id') id: string, @Body() body:{nickname: string}) : Promise<User>{
-      const {nickname}= body;
-      return this.userService.updateUser(id, nickname);
-    }
+  @Put()
+  async updateUser(@Query('id') id: string, @Body() body: Partial<User>): Promise<User> {
+    return this.userService.updateUser(id, body);
+  }
 
   @Delete()
   async removeUser(@Query('id') id: string): Promise<User>{
     return this.userService.removeUser(id);
   }
 
+  @Put(':userId/create-myplayer')
+  async createMyPlayerForUser(
+    @Param('userId') userId: string,
+    @Body() myPlayerData: Partial<MyPlayer>
+  ): Promise<MyPlayer> {
+    return this.userService.createMyPlayerForUser(userId, myPlayerData);
+  }
+
+  @Get(':userId/myplayers')
+  async getMyPlayerIds(@Param('userId') userId: string): Promise<string[]> {
+    return this.userService.findPlayerIds(userId);
+  }
+
+  @Post('friend-request/:senderId/:receiverId')
+  async sendFriendRequest(
+    @Param('senderId') senderId: string,
+    @Param('receiverId') receiverId: string,
+  ): Promise<User> {
+    return this.userService.sendFriendRequest(senderId, receiverId);
+  }
+
+  @Patch(':userId/accept-friend-request/:senderId')
+  async acceptFriendRequest(
+    @Param('userId') userId: string,
+    @Param('senderId') senderId: string,
+  ): Promise<User> {
+    return this.userService.acceptFriendRequest(userId, senderId);
+  }
+
+  @Patch(':userId/reject-friend-request/:senderId')
+  async rejectFriendRequest(
+    @Param('userId') userId: string,
+    @Param('senderId') senderId: string,
+  ): Promise<User> {
+    return this.userService.rejectFriendRequest(userId, senderId);
+  }
+
+  @Get(':userId/pending-friend-requests')
+  async getPendingRequests(@Param('userId') userId: string): Promise<FriendRequest[]> {
+    return this.userService.getPendingRequests(userId);
+  }
+
 }
+

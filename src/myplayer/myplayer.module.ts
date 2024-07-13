@@ -9,6 +9,7 @@ import { MyPlayer, MyPlayerSchema } from 'src/schemas/myplayer.schema';
     MongooseModule.forFeature([{ name: MyPlayer.name, schema: MyPlayerSchema }])
   ],
   controllers: [MyPlayerController],
-  providers: [MyPlayerService]
+  providers: [MyPlayerService],
+  exports: [MyPlayerService],
 })
-export class MyplayerModule {}
+export class MyPlayerModule {}

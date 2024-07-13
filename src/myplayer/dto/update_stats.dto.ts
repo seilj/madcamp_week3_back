@@ -7,6 +7,7 @@ export class UpdateStatsDto {
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) passing?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) firstTouch?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) crossing?: number;
+  @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) vision?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) offTheBall?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) tackling?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) marking?: number;
@@ -15,9 +16,11 @@ export class UpdateStatsDto {
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) strength?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) pace?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) stamina?: number;
+  @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) agility?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) jumping?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) injuryProneness?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) reflexes?: number;
+  @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) aeriel?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) handling?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) communication?: number;
   @IsOptional() @IsNumber() @Min(MIN) @Max(MAX) commandOfArea?: number;

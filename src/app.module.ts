@@ -3,14 +3,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { MyplayerModule } from './myplayer/myplayer.module';
+import { MyPlayerModule } from './myplayer/myplayer.module';
 import { MeetingsModule } from './meetings/meetings.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost/userdb'),
     UserModule,
-    MyplayerModule,
+    MyPlayerModule,
     MeetingsModule
   ],
   controllers: [AppController],
