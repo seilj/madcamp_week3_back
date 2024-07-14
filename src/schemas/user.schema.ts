@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { FriendRequest } from './friend_request.schema';
+import { Meeting } from './meeting.schema';
 
 @Schema()
 export class User extends Document {
@@ -42,6 +43,9 @@ export class User extends Document {
 
   @Prop({ type: [FriendRequest], default: []})
   friendRequests: FriendRequest[];
+
+  @Prop({ type: [String], default: []})
+  meetings: string[];
 }
 
 

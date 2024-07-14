@@ -7,12 +7,15 @@ import { User, UserDocument } from '../schemas/user.schema';
 import { MyPlayer, MyPlayerDocument } from 'src/schemas/myplayer.schema';
 import { MyPlayerService } from '../myplayer/myplayer.service';
 import { FriendRequest, FriendRequestDocument } from '../schemas/friend_request.schema';
+import { Meeting } from 'src/schemas/meeting.schema';
+import { MeetingsService } from 'src/meetings/meetings.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>, 
     private readonly myPlayerService: MyPlayerService, 
+    private readonly meetingsService: MeetingsService,
   ) {}
 
   async createUser(user: User): Promise<boolean> {
@@ -211,6 +214,33 @@ export class UserService {
     }
 
     return user.friendRequests.filter((request) => request.status === 'pending');
+  }
+
+  async getMeetings(userId: string): Promise<Meeting[]>{
+    const user = await this.userModel.findOne({ id: userId });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const meetings = await Promise.all(user.meetings.map(async (meetingId) => {
+      return await this.meetingsService.findOne(meetingId);
+    }));
+
+    return meetings;
+  }
+
+  async getFriends(userId: string): Promise<User[]>{
+    const user = await this.userModel.findOne({ id: userId });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    // 친구 목록의 ID를 통해 유저 정보를 가져옴
+    const friends = await Promise.all(user.friends.map(async (friendId) => {
+      return await this.userModel.findOne({ id: friendId });
+    }));
+
+    return friends;
   }
 
 }

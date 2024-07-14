@@ -5,11 +5,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from 'src/schemas/user.schema';
 import { MyPlayerModule } from '../myplayer/myplayer.module';
 import { FriendRequest, FriendRequestSchema } from 'src/schemas/friend_request.schema';
+import { MeetingsModule } from 'src/meetings/meetings.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }, { name: FriendRequest.name, schema: FriendRequestSchema }]),
     MyPlayerModule,
+    MeetingsModule,
   ],
   controllers: [UserController],
   providers: [UserService]
