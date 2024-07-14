@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-
 export type MeetingDocument = Meeting & Document;
 
 @Schema()
@@ -31,6 +30,10 @@ export class Meeting {
 
   @Prop({ default: false }) //펍 예약 가능 여부
   isClosed: boolean;
-}
+  @Prop({ required: true }) // 경도
+  longitude: number;
 
+  @Prop({ required: true }) // 위도
+  latitude: number;
+}
 export const MeetingSchema = SchemaFactory.createForClass(Meeting);
