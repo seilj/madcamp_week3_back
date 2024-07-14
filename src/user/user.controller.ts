@@ -46,6 +46,11 @@ export class UserController {
     return this.userService.getAllUsers();
   }
 
+  @Get()
+  async getUserById(@Query('Id') id: string): Promise<User>{
+    return await this.userService.getUserById(id);
+  }
+
   @Get('exists')
     async isThereKakaoId(@Query('kakaoId') kakaoId: string): Promise<boolean>{
       const user = await this.userService.getUserByKakaoId(kakaoId);
@@ -81,6 +86,21 @@ export class UserController {
     @Param('receiverId') receiverId: string,
   ): Promise<User> {
     return this.userService.sendFriendRequest(senderId, receiverId);
+  }
+
+  @Get(':userId/friends')
+  async getFriends(@Param('userId') userId: string): Promise<User[]> {
+    const user = await this.userService.getUserById(userId);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    // 친구 목록의 ID를 통해 유저 정보를 가져옴
+    const friends = await Promise.all(user.friends.map(async (friendId) => {
+      return await this.userService.getUserById(friendId);
+    }));
+
+    return friends;
   }
 
   @Patch(':userId/accept-friend-request/:senderId')
