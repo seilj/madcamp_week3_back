@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
-import { MyplayerController } from './myplayer.controller';
-import { MyplayerService } from './myplayer.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { MyPlayerController } from './myplayer.controller';
+import { MyPlayerService } from './myplayer.service';
+import { MyPlayer, MyPlayerSchema } from 'src/schemas/myplayer.schema';
 
 @Module({
-  controllers: [MyplayerController],
-  providers: [MyplayerService]
+  imports: [
+    MongooseModule.forFeature([{ name: MyPlayer.name, schema: MyPlayerSchema }])
+  ],
+  controllers: [MyPlayerController],
+  providers: [MyPlayerService],
+  exports: [MyPlayerService],
 })
-export class MyplayerModule {}
+export class MyPlayerModule {}
