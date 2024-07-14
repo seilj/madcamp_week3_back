@@ -7,6 +7,7 @@ import { MyPlayerModule } from './myplayer/myplayer.module';
 import { MeetingsModule } from './meetings/meetings.module';
 import { HttpModule } from '@nestjs/axios';
 import { MeetingsGateway } from './meetings/meetings.gateway';
+import { MatchModule } from './match/match.module';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { MeetingsGateway } from './meetings/meetings.gateway';
     UserModule,
     MeetingsModule,
     HttpModule, // HttpModule 추가
-    MyPlayerModule,
+    MyPlayerModule, MatchModule,
   ],
   controllers: [AppController],
   providers: [AppService, MeetingsGateway], // MeetingsGateway 추가
