@@ -28,6 +28,10 @@ export class Match extends Document {
 
   @Prop({ default: 0 })
   awayTeamPoints: number;
+
+  //승부예측 및 응원 오픈톡 스키마 등록
+
+
 }
 
 export type MatchDocument = Match & Document;
