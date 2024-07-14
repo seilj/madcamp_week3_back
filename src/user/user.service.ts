@@ -30,7 +30,7 @@ export class UserService {
   }
 
   async validateUserPassword(id: string, password: string): Promise<User | null> {
-    const user = await this.userModel.findOne({ id }).exec();
+    const user = await this.userModel.findOne({ id: id }).exec();
     if (!user) {
       return null;
     }
@@ -43,7 +43,7 @@ export class UserService {
   }
 
   async getUserById(id: string): Promise<User> {
-    return this.userModel.findOne({ id }).exec();
+    return this.userModel.findOne({ id: id }).exec();
   }
 
   async getUserByKakaoId(kakaoId: string): Promise<User> {
