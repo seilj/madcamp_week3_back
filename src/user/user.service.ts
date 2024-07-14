@@ -15,6 +15,7 @@ export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>, 
     private readonly myPlayerService: MyPlayerService, 
+    private readonly meetingsService: MeetingsService,
   ) {}
 
   async createUser(user: User): Promise<boolean> {
