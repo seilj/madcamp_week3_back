@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from 'mongoose';
 
 @Schema()
 export class Match extends Document {
@@ -17,19 +18,27 @@ export class Match extends Document {
   @Prop({ required: true })
   startTime: string;
 
+  //승부예측 및 응원 오픈톡 스키마 등록
+  @Prop({ default: 0 })
+   homeTeamVotes: number;
+
+    @Prop({ default: 0 })
+    awayTeamVotes: number;
+
+    @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
+    homeTeamVoters: Types.ObjectId[];
+
+    @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
+    awayTeamVoters: Types.ObjectId[];
+
+
+
   @Prop({ default: 0 })
   homeTeamScore: number;
 
   @Prop({ default: 0 })
   awayTeamScore: number;
 
-  @Prop({ default: 0 })
-  homeTeamPoints: number;
-
-  @Prop({ default: 0 })
-  awayTeamPoints: number;
-
-  //승부예측 및 응원 오픈톡 스키마 등록
 
 
 }
