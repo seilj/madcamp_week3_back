@@ -8,36 +8,33 @@ import { Match, MatchDocument } from 'src/schemas/match.schema';
 export class MatchService {
   constructor(@InjectModel(Match.name) private matchModel: Model<MatchDocument>) {}
 
-  async vote(matchId: string, userId: string, team: 'home' | 'away'): Promise<Match> {
-    const match = await this.matchModel.findById(matchId);
-
+  async vote(matchId: string, team: string, userId: string): Promise<Match> {
+    const match = await this.matchModel.findById(matchId).exec();
     if (!match) {
-      throw new NotFoundException('Match not found');
+      throw new Error('Match not found');
     }
 
     if (team === 'home') {
-      if (match.homeTeamVoters.includes(userId)) {
-        throw new BadRequestException('You already voted for the home team');
+      if (!match.homeTeamVoters.includes(userId)) {
+        match.homeTeamVotes += 1;
+        match.homeTeamVoters.push(userId);
       }
-      match.homeTeamVoters.push(userId);
-      match.homeTeamVotes++;
+    } else if (team === 'away') {
+      if (!match.awayTeamVoters.includes(userId)) {
+        match.awayTeamVotes += 1;
+        match.awayTeamVoters.push(userId);
+      }
     } else {
-      if (match.awayTeamVoters.includes(userId)) {
-        throw new BadRequestException('You already voted for the away team');
-      }
-      match.awayTeamVoters.push(userId);
-      match.awayTeamVotes++;
+      throw new Error('Invalid team');
     }
 
-    await match.save();
-
-    return match;
+    return match.save();
   }
 
   async getMatchesByDate(date: Date): Promise<Match[]> {
     const start = new Date(date.setHours(0, 0, 0, 0));
     const end = new Date(date.setHours(23, 59, 59, 999));
-    return this.matchModel.find({ date: { $gte: start, $lt: end } }).exec();
+    return await this.matchModel.find({ date: { $gte: start, $lt: end } }).exec();
   }
 
   async addToWaitUsers(matchId: string, userId: string): Promise<Match> {

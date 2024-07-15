@@ -3,9 +3,6 @@ import { Document, Types } from 'mongoose';
 
 @Schema()
 export class Match extends Document {
-  @Prop({ required: true }) // 중복 ID를 허용하지 않도록 unique 설정
-  date: Date;
-
   @Prop({ required: true })
   league: string;
 
@@ -16,7 +13,7 @@ export class Match extends Document {
   awayTeam: string;
 
   @Prop({ required: true })
-  startTime: string;
+  startTime: Date;
 
   //승부예측 및 응원 오픈톡 스키마 등록
   @Prop({ default: 0 })
