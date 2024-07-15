@@ -22,14 +22,14 @@ export class Match extends Document {
   @Prop({ default: 0 })
    homeTeamVotes: number;
 
-    @Prop({ default: 0 })
-    awayTeamVotes: number;
+  @Prop({ default: 0 })
+  awayTeamVotes: number;
 
-    @Prop({ type: [{ type: String, ref: 'User' }] })
-    homeTeamVoters: string[];
+  @Prop({ type: [{ type: String, ref: 'User' }], default: []})
+  homeTeamVoters: string[];
 
-    @Prop({ type: [{ type: String, ref: 'User' }] })
-    awayTeamVoters: string[];
+  @Prop({ type: [{ type: String, ref: 'User' }], default: []})
+  awayTeamVoters: string[];
 
 
 
@@ -39,8 +39,8 @@ export class Match extends Document {
   @Prop({ default: 0 })
   awayTeamScore: number;
 
-
-
+  @Prop({ type: [{ type: String, ref: 'User' }], default: []})
+  waitUsers: string[];
 }
 
 export type MatchDocument = Match & Document;
