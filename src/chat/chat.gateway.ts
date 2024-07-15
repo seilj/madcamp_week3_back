@@ -34,9 +34,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('newMessage')
-  handleNewMessage(@MessageBody() message: { matchId: string; message: string }) {
+  handleNewMessage(client: Socket, @MessageBody() message: { matchId: string; message: string }) {
     console.log(`Message received for room ${message.matchId}: ${message.message}`);
-    this.server.to(message.matchId).emit('message', message.message);
+    client.to(message.matchId).emit('message', message.message);
     console.log(`Message sent to room ${message.matchId}: ${message.message}`);
   }
 }

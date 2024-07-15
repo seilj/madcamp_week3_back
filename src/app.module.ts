@@ -19,11 +19,11 @@ import { ChatGateway } from './chat/chat.gateway';
     UserModule,
     MeetingsModule,
     HttpModule, // HttpModule 추가
-    MyPlayerModule, 
+    MyPlayerModule,
     MatchModule,
     ChatModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ChatGateway], // MeetingsGateway 추가
+  providers: [AppService], // MeetingsGateway 추가
 })
 export class AppModule {}

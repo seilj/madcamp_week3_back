@@ -18,13 +18,13 @@ export class MatchController {
 
 
   @Get('by-date')
-  async getMatchesByDate(@Query('date') date: string) {
-    this.logger.warn("matches for"+date);
-    const dateTime = new Date(date);
-    this.logger.warn(dateTime,"*******");
-    const matches = await this.matchService.getMatchesByDate(dateTime);
-    return matches;
-  }
+async getMatchesByDate(@Query('date') date: string) {
+  this.logger.warn("matches for " + date);
+  const dateTime = new Date(date);
+  this.logger.warn(dateTime, "*******");
+  const matches = await this.matchService.getMatchesByDate(dateTime);
+  return matches;
+}
 
   @Post('wait/:matchId/:userId')
   async addToWaitUsers(

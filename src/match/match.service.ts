@@ -33,8 +33,8 @@ export class MatchService {
 
   async getMatchesByDate(date: Date): Promise<Match[]> {
     // 날짜를 시작과 종료로 설정
-    const start = new Date(date.setHours(0, 0, 0, 0));
-    const end = new Date(date.setHours(23, 59, 59, 999));
+    const start = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0));
+    const end = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 23, 59, 59, 999));
   
     // 날짜 범위 쿼리 수행
     return await this.matchModel.find({
