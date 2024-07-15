@@ -18,13 +18,14 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('join')
-  handleJoinRoom(client: Socket, payload: { matchId: string }) {
-    const { matchId } = payload;
+  handleJoinRoom(client: Socket, payload: { matchId: string, userName: string }) {
+    const { matchId, userName } = payload;
     if (client) {
-      console.log(`Attempting to join room ${matchId} for user ${client.id}`);
+      console.log(`Attempting to join room ${matchId} for user ${userName}`);
       try {
         client.join(matchId);
-        console.log(`User ${client.id} joined room ${matchId}`);
+        console.log(`User ${userName} joined room ${matchId}`);
+        this.server.to(matchId).emit('userJoined', { userName });
       } catch (error) {
         console.error(`Error joining room ${matchId}:`, error);
       }
@@ -34,9 +35,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('newMessage')
-  handleNewMessage(client: Socket, @MessageBody() message: { matchId: string; message: string }) {
-    console.log(`Message received for room ${message.matchId}: ${message.message}`);
-    client.to(message.matchId).emit('message', message.message);
-    console.log(`Message sent to room ${message.matchId}: ${message.message}`);
+  handleNewMessage(@MessageBody() message: { matchId: string; message: string; userName: string }) {
+    const { matchId, message: msg, userName } = message;
+    console.log(`Message received from ${userName} for room ${matchId}: ${msg}`);
+    this.server.to(matchId).emit('message', { message: msg, userName });
+    console.log(`Message sent to room ${matchId}: ${msg}`);
   }
 }
