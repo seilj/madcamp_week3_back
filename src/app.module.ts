@@ -10,7 +10,7 @@ import { MeetingsGateway } from './meetings/meetings.gateway';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/userdb'),
+    MongooseModule.forRoot('mongodb+srv://yjbigbrr:youha0227@cluster0.zh6wdf9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'),
     UserModule,
     MeetingsModule,
     HttpModule, // HttpModule 추가

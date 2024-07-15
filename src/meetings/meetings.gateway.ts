@@ -1,12 +1,5 @@
-import {
-  WebSocketGateway,
-  WebSocketServer,
-  SubscribeMessage,
-  OnGatewayInit,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  MessageBody,
-} from '@nestjs/websockets';
+// meetings.gateway.ts (or equivalent WebSocket server code)
+import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, MessageBody } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { MeetingsService } from './meetings.service';
 import { CreateMeetingDto } from './create-meeting.dto';
@@ -33,18 +26,18 @@ export class MeetingsGateway implements OnGatewayInit, OnGatewayConnection, OnGa
   @SubscribeMessage('createMeeting')
   async create(@MessageBody() createMeetingDto: CreateMeetingDto): Promise<void> {
     const createdMeeting = await this.meetingsService.create(createMeetingDto);
-    this.server.emit('meetingCreated', createdMeeting);
+    this.server.emit('meetingCreated', createdMeeting); // 브로드캐스트
   }
 
   @SubscribeMessage('joinMeeting')
   async join(@MessageBody() joinMeetingDto: JoinMeetingDto): Promise<void> {
     const updatedMeeting = await this.meetingsService.join(joinMeetingDto);
-    this.server.emit('meetingUpdated', updatedMeeting);
+    this.server.emit('meetingUpdated', updatedMeeting); // 브로드캐스트
   }
 
   @SubscribeMessage('findAllMeetings')
   async findAll(): Promise<void> {
     const meetings = await this.meetingsService.findAll();
-    this.server.emit('meetingsFound', meetings);
+    this.server.emit('meetingsFound', meetings); // 브로드캐스트
   }
 }

@@ -74,7 +74,6 @@ export class MeetingsService {
       throw new Error('Meeting is full');
     }
   }
-
   async findOne(meetingId: string): Promise<Meeting> {
     return this.meetingModel.findById(meetingId);
   }
