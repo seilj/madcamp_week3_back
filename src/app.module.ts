@@ -14,7 +14,7 @@ import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/userdb'),
+    MongooseModule.forRoot('mongodb+srv://yjbigbrr:youha0227@cluster0.zh6wdf9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'),
     ScheduleModule.forRoot(),
     UserModule,
     MeetingsModule,

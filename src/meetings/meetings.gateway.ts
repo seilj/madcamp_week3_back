@@ -5,7 +5,7 @@ import { MeetingsService } from './meetings.service';
 import { CreateMeetingDto } from './create-meeting.dto';
 import { JoinMeetingDto } from './join-meeting.dto';
 
-@WebSocketGateway()
+@WebSocketGateway(3001, { cors: { origin: '*' } } )
 export class MeetingsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
