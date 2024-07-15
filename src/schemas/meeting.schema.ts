@@ -5,9 +5,6 @@ export type MeetingDocument = Meeting & Document;
 @Schema()
 export class Meeting {
 
-  @Prop({ unique: true, required: true })
-  id: string;
-
   @Prop({ required: true })
   title: string;
 
