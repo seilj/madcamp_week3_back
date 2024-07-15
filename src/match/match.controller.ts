@@ -1,8 +1,10 @@
-import { Controller, Param, Post, Get, Query, Body, UseGuards, Req, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Controller, Param, Post, Get, Query, Body, UseGuards, Req, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
 import { MatchService } from './match.service';
 
 @Controller('match')
 export class MatchController {
+
+  private readonly logger = new Logger(MatchController.name);
   constructor(private readonly matchService: MatchService) {}
 
   @Post('vote/:matchId/:team/:userId')
@@ -17,7 +19,10 @@ export class MatchController {
 
   @Get('by-date')
   async getMatchesByDate(@Query('date') date: string) {
-    const matches = await this.matchService.getMatchesByDate(new Date(date));
+    this.logger.warn("matches for"+date);
+    const dateTime = new Date(date);
+    this.logger.warn(dateTime,"*******");
+    const matches = await this.matchService.getMatchesByDate(dateTime);
     return matches;
   }
 
