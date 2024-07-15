@@ -36,5 +36,7 @@ export class Meeting {
 
   @Prop({ required: true }) // 위도
   latitude: number;
+  @Prop({ required: true })
+  creatorId: string;
 }
 export const MeetingSchema = SchemaFactory.createForClass(Meeting);
