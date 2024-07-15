@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Match, MatchDocument } from 'src/schemas/match.schema';
 
-@Injectable()
-export class MatchService {
     @Injectable()
     export class MatchService {
       constructor(@InjectModel(Match.name) private matchModel: Model<MatchDocument>) {}
@@ -17,15 +15,17 @@ export class MatchService {
         }
 
         if (team === 'home') {
-          if (match.homeTeamVotes.includes(userId)) {
+          if (match.homeTeamVoters.includes(userId)) {
             throw new BadRequestException('You already voted for the home team');
           }
-          match.homeTeamVotes.push(userId);
+          match.homeTeamVoters.push(userId);
+          match.homeTeamVotes++;
         } else {
-          if (match.awayTeamVotes.includes(userId)) {
+          if (match.awayTeamVoters.includes(userId)) {
             throw new BadRequestException('You already voted for the away team');
           }
-          match.awayTeamVotes.push(userId);
+          match.awayTeamVoters.push(userId);
+          match.awayTeamVotes++;
         }
 
         await match.save();

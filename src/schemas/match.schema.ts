@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 @Schema()
 export class Match extends Document {
@@ -25,11 +25,11 @@ export class Match extends Document {
     @Prop({ default: 0 })
     awayTeamVotes: number;
 
-    @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
-    homeTeamVoters: Types.ObjectId[];
+    @Prop({ type: [{ type: String, ref: 'User' }] })
+    homeTeamVoters: string[];
 
-    @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
-    awayTeamVoters: Types.ObjectId[];
+    @Prop({ type: [{ type: String, ref: 'User' }] })
+    awayTeamVoters: string[];
 
 
 
