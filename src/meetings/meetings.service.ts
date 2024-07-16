@@ -6,10 +6,12 @@ import { Meeting, MeetingDocument } from 'src/schemas/meeting.schema';
 import { CreateMeetingDto } from './create-meeting.dto';
 import { JoinMeetingDto } from './join-meeting.dto';
 import axios from 'axios';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class MeetingsService {
-  constructor(@InjectModel(Meeting.name) private meetingModel: Model<MeetingDocument>) {}
+  constructor(@InjectModel(Meeting.name) private meetingModel: Model<MeetingDocument>,
+) {}
 
   async getCoordinates(address: string): Promise<{ longitude: number, latitude: number }> {
     const apiKey = '22f40ccdc4442898c8643d005848ae3d'; // 여기에 REST API 키를 입력하세요
@@ -47,31 +49,46 @@ export class MeetingsService {
       currentParticipants: 1,
       participants: [creatorId],
     });
-    return newMeeting.save();
+    const savedMeeting = await newMeeting.save();
+    //await UserService.addMeeting(creatorId, savedMeeting._id.toString());
+    return savedMeeting;
   }
 
   async join(joinMeetingDto: JoinMeetingDto): Promise<Meeting> {
     const { meetingId, userId } = joinMeetingDto;
-    const meeting = await this.meetingModel.findById(meetingId);
-    if (!meeting) {
-      throw new Error('Meeting not found');
-    }
-
-    if (meeting.isClosed) {
-      throw new Error('Meeting is closed');
-    }
-
-    if (meeting.currentParticipants < meeting.maxParticipants) {
-      meeting.participants.push(userId);
-      meeting.currentParticipants += 1;
-
-      if (meeting.currentParticipants >= meeting.maxParticipants) {
-        meeting.isClosed = true;
+  
+    try {
+      // meetingId가 올바른 형식인지 확인합니다.
+      console.log('meetingId:', meetingId);
+  
+      // 데이터베이스에서 미팅 검색
+      const meeting = await this.meetingModel.findById(meetingId);
+  
+      if (!meeting) {
+        throw new Error('Meeting not found');
       }
+  
+      if (meeting.isClosed) {
+        throw new Error('Meeting is closed');
+      }
+  
+      if (meeting.currentParticipants < meeting.maxParticipants) {
+        meeting.participants.push(userId);
+        meeting.currentParticipants += 1;
+  
+        if (meeting.currentParticipants >= meeting.maxParticipants) {
+          meeting.isClosed = true;
+        }
 
-      return meeting.save();
-    } else {
-      throw new Error('Meeting is full');
+        //this.userService.addMeeting(userId, meetingId);
+  
+        return meeting.save();
+      } else {
+        throw new Error('Meeting is full');
+      }
+    } catch (error) {
+      console.error('Error in join method:', error);
+      throw error;
     }
   }
   

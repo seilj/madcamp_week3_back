@@ -37,23 +37,26 @@ async create(@MessageBody() createMeetingDto: CreateMeetingDto): Promise<void> {
 }
 
 @SubscribeMessage('joinMeeting')
-async join(@MessageBody() joinMeetingDto: JoinMeetingDto): Promise<void> {
+async join(client: Socket, @MessageBody() joinMeetingDto: JoinMeetingDto): Promise<void> {
   try {
     console.log('Received joinMeeting event:', joinMeetingDto);
     const updatedMeeting = await this.meetingsService.join(joinMeetingDto);
     console.log('Meeting updated:', updatedMeeting);
-    this.server.emit('meetingUpdated', updatedMeeting); // 브로드캐스트
+    
+    // 클라이언트에게 업데이트된 미팅 정보를 전송합니다.
+    this.server.emit('meetingUpdated', updatedMeeting);
   } catch (error) {
     console.error('Error joining meeting:', error);
-    this.server.emit('joinMeetingError', { error: error.message }); // 에러 전송
+    // 클라이언트에게 에러를 전송합니다.
+    client.send(JSON.stringify({ event: 'joinMeetingError', error: error.message }));
   }
 }
 
   @SubscribeMessage('findAllMeetings')
-  async findAll(): Promise<void> {
+  async findAll(client: Socket): Promise<void> {
     console.log('Received findAllMeeting event');
     const meetings = await this.meetingsService.findAll();
     console.log('Meetings found:', meetings);
-    this.server.emit('meetingsFound', meetings); // 브로드캐스트
+    client.send(JSON.stringify({ event: 'meetingsFound', data: meetings })); // 브로드캐스트
   }
 }

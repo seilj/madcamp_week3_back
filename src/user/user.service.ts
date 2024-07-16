@@ -229,6 +229,13 @@ export class UserService {
     return meetings;
   }
 
+  async addMeeting(userId: string, meetingId: string): Promise<User>{
+    const user = await this.userModel.findOne({id:userId});
+    user.meetings.push(meetingId);
+    await user.save();
+    return user;
+  }
+
   async getFriends(userId: string): Promise<User[]>{
     const user = await this.userModel.findOne({ id: userId });
     if (!user) {
