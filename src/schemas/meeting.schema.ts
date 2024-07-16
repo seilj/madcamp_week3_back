@@ -8,6 +8,7 @@ export class Meeting {
   @Prop({ required: true })
   title: string;
 
+  
   @Prop({ required: true }) //최대 참여자수
   maxParticipants: number;
 
