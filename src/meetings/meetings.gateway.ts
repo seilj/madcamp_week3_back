@@ -17,13 +17,14 @@ export class MeetingsGateway implements OnGatewayInit, OnGatewayConnection, OnGa
 
   handleConnection(client: Socket, ...args: any[]) {
     console.log('Client connected:', client.id);
+    client.emit('welcome', { event: 'welcome', message: 'Welcome to the WebSocket server!' });
   }
 
   handleDisconnect(client: Socket) {
     console.log('Client disconnected:', client.id);
   }
 
-@SubscribeMessage('createMeeting')
+  @SubscribeMessage('createMeeting')
 async create(@MessageBody() createMeetingDto: CreateMeetingDto): Promise<void> {
   try {
     const createdMeeting = await this.meetingsService.create(createMeetingDto);
@@ -31,6 +32,7 @@ async create(@MessageBody() createMeetingDto: CreateMeetingDto): Promise<void> {
     this.server.emit('meetingCreated', createdMeeting); // 브로드캐스트
   } catch (error) {
     console.error('Error creating meeting:', error);
+    this.server.emit('createMeetingError', { error: error.message }); // 에러 전송
   }
 }
 
@@ -43,6 +45,7 @@ async join(@MessageBody() joinMeetingDto: JoinMeetingDto): Promise<void> {
     this.server.emit('meetingUpdated', updatedMeeting); // 브로드캐스트
   } catch (error) {
     console.error('Error joining meeting:', error);
+    this.server.emit('joinMeetingError', { error: error.message }); // 에러 전송
   }
 }
 
@@ -50,7 +53,7 @@ async join(@MessageBody() joinMeetingDto: JoinMeetingDto): Promise<void> {
   async findAll(): Promise<void> {
     console.log('Received findAllMeeting event');
     const meetings = await this.meetingsService.findAll();
-    console.log('Meeting updated:', meetings);
+    console.log('Meetings found:', meetings);
     this.server.emit('meetingsFound', meetings); // 브로드캐스트
   }
 }

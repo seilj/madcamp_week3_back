@@ -3,10 +3,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Cron } from '@nestjs/schedule';
 import { Model } from 'mongoose';
 import { Match, MatchDocument } from 'src/schemas/match.schema';
+import { NotificationService } from './notification.service';
 
 @Injectable()
 export class MatchService {
-  constructor(@InjectModel(Match.name) private matchModel: Model<MatchDocument>) {}
+  constructor(@InjectModel(Match.name) private matchModel: Model<MatchDocument>,
+  private readonly notificationService: NotificationService
+) {}
 
   async vote(matchId: string, team: string, userId: string): Promise<Match> {
     const match = await this.matchModel.findById(matchId).exec();
@@ -67,7 +70,8 @@ export class MatchService {
 
     for (const match of matches) {
       for (const userId of match.waitUsers) {
-        // 여기에 알림 전송 로직 추가
+        const message = `The match between ${match.homeTeam} and ${match.awayTeam} will start in one hour.`;
+        await this.notificationService.sendNotification(userId, message);
       }
     }
   }
