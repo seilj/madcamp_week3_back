@@ -8,6 +8,7 @@ export class Meeting {
   @Prop({ required: true })
   title: string;
 
+  
   @Prop({ required: true }) //최대 참여자수
   maxParticipants: number;
 
@@ -36,7 +37,8 @@ export class Meeting {
 
   @Prop({ required: true }) // 위도
   latitude: number;
-  @Prop({ required: true })
+
+  @Prop({required: true})
   creatorId: string;
 }
 export const MeetingSchema = SchemaFactory.createForClass(Meeting);
