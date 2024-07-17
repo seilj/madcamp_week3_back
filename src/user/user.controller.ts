@@ -6,7 +6,6 @@ import { UserService } from './user.service';
 import { User } from '../schemas/user.schema';
 import { MyPlayer } from '../schemas/myplayer.schema';
 import { FriendRequest } from 'src/schemas/friend_request.schema';
-import { Meeting } from 'src/schemas/meeting.schema';
 
 @Controller('users')
 export class UserController {
@@ -113,11 +112,6 @@ export class UserController {
   @Get(':userId/pending-friend-requests')
   async getPendingRequests(@Param('userId') userId: string): Promise<FriendRequest[]> {
     return this.userService.getPendingRequests(userId);
-  }
-
-  @Get(':userId/meetings')
-  async getMeetings(@Param('userId') userId: string): Promise<Meeting[]>{
-    return this.userService.getMeetings(userId);
   }
 
 }
