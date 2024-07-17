@@ -4,11 +4,12 @@ import { MeetingsController } from './meetings.controller';
 import { MeetingsService } from './meetings.service';
 import { Meeting, MeetingSchema } from '../schemas/meeting.schema';
 import { MeetingsGateway } from './meetings.gateway'; // MeetingsGateway를 import
-import { UserModule } from '../user/user.module';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Meeting.name, schema: MeetingSchema }]),
+    UserModule,
   ],
   controllers: [MeetingsController],
   providers: [MeetingsService, MeetingsGateway],

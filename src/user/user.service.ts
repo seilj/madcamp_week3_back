@@ -7,15 +7,12 @@ import { User, UserDocument } from '../schemas/user.schema';
 import { MyPlayer, MyPlayerDocument } from 'src/schemas/myplayer.schema';
 import { MyPlayerService } from '../myplayer/myplayer.service';
 import { FriendRequest, FriendRequestDocument } from '../schemas/friend_request.schema';
-import { Meeting } from 'src/schemas/meeting.schema';
-import { MeetingsService } from 'src/meetings/meetings.service';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>, 
-    private readonly myPlayerService: MyPlayerService, 
-    private readonly meetingsService: MeetingsService,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private readonly myPlayerService: MyPlayerService,
   ) {}
 
   async createUser(user: User): Promise<boolean> {
@@ -216,24 +213,23 @@ export class UserService {
     return user.friendRequests.filter((request) => request.status === 'pending');
   }
 
-  async getMeetings(userId: string): Promise<Meeting[]>{
-    const user = await this.userModel.findOne({ id: userId });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    const meetings = await Promise.all(user.meetings.map(async (meetingId) => {
-      return await this.meetingsService.findOne(meetingId);
-    }));
-
-    return meetings;
-  }
-
   async addMeeting(userId: string, meetingId: string): Promise<User>{
     const user = await this.userModel.findOne({id:userId});
     user.meetings.push(meetingId);
     await user.save();
     return user;
+  }
+
+  async removeMeeting(userId: string, meetingId: string): Promise<void> {
+    try {
+      await this.userModel.updateOne(
+        { id: userId },
+        { $pull: { meetings: meetingId } }
+      );
+    } catch (error) {
+      console.error('Error removing meeting from user:', error);
+      throw error;
+    }
   }
 
   async getFriends(userId: string): Promise<User[]>{

@@ -42,3 +42,32 @@ function sendMessage() {
     console.log('Sent message:', message);
     document.getElementById('messages').innerHTML += '<p>Sent message: ' + JSON.stringify(message) + '</p>';
 }
+
+function joinMeeting(){
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+        console.error('WebSocket is not connected.');
+        return;
+      }
+
+    const message = {
+        event: 'joinMeeting',
+        data: {
+            meetingId: '66967dac6543797c6656fe7a',
+            userId: 'hahaha'
+        }
+    };
+
+    socket.send(JSON.stringify(message));
+    console.log('Sent message:', message);
+    document.getElementById('messages').innerHTML += '<p>Sent message: ' + JSON.stringify(message) + '</p>';
+}
+
+function findMeetings(){
+    const message = {
+        event: 'findAllMeetings'
+    }
+
+    socket.send(JSON.stringify(message));
+    console.log('find all meetings');
+    document.getElementById('messages').innerHTML += '<p>Sent message: ' + JSON.stringify(message) + '</p>';
+}
